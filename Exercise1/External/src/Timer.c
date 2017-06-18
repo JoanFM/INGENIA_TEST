@@ -13,11 +13,16 @@
 
 static clock_t s_TimeInit;
 
+/*When properly registered, this function will be called every ms and we will use that time to check if something
+got in the workspace of the robot*/
 __attribute__ ((interrupt)) void TimerISR(){
+    /*Set the SPI to listen to the sensor data*/
     SPIEepromDisable();
     SPISensorEnable();
-    while (SPIRead() > SENSOR_PRESENCE_THRESHOLD) {
+    if (SPIRead() > SENSOR_PRESENCE_THRESHOLD) {
+        /*Stop the robot and main will exit*/
         RobotStop();
+        return;
     }
 }
 
@@ -51,5 +56,5 @@ void TimerEnd(void){
 
 uint32_t TimetGetus(void){
     clock_t now = clock();
-    return ((uint32_t)(now - s_TimeInit)/(MICROSECONDS_PER_SECOND * CLOCKS_PER_SEC));;
+    return ((uint32_t)(now - s_TimeInit)/(MICROSECONDS_PER_SECOND * CLOCKS_PER_SEC));
 }
