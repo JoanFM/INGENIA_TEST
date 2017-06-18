@@ -1,0 +1,13 @@
+cmake_minimum_required (VERSION 2.8.11)
+#if we had the drivers and needed includes we should add this to the compiler command
+#add_definitions(-DDRIVERS)
+set(BIN_DIR bin)
+set(SOURCE_DIR src)
+set(EXTERNAL_DIR External)
+set(INCLUDE_DIR Include)
+project (Exercise1)
+include_directories(${EXTERNAL_DIR}/${INCLUDE_DIR})
+add_library(externallib STATIC ${EXTERNAL_DIR}/${SOURCE_DIR}/robot.c ${EXTERNAL_DIR}/${SOURCE_DIR}/SPIcom.c ${EXTERNAL_DIR}/${SOURCE_DIR}/Timer.c)
+file(MAKE_DIRECTORY ${BIN_DIR})
+add_executable(${BIN_DIR}/Exercise1 ${SOURCE_DIR}/Exercise1.c)
+target_link_libraries(${BIN_DIR}/Exercise1 externallib)
