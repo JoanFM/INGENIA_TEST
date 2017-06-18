@@ -4,12 +4,14 @@
 #include <stdio.h>
 #include <time.h>
 
+
+#define MICROSECONDS_PER_SECOND 1000000
 #ifdef DRIVERS
 #include "interrupt.h"
 #define TIMER_IRQ 8
 #endif
 
-static time_t s_TimeInit;
+static clock_t s_TimeInit;
 
 __attribute__ ((interrupt)) void TimerISR(){
     SPIEepromDisable();
@@ -31,7 +33,7 @@ void TimerInit(void){
     request_irq(irq, TimerISR,
                 irqflags, "TimerISR", NULL);
 #endif
-    time(&s_TimeInit);
+    s_TimeInit = clock();
 }
 
 void TimerEnd(void){
@@ -48,7 +50,6 @@ void TimerEnd(void){
 }
 
 uint32_t TimetGetus(void){
-    time_t now;
-    time(&now);
-    return 0;
+    clock_t now = clock();
+    return ((uint32_t)(now - s_TimeInit)/(MICROSECONDS_PER_SECOND * CLOCKS_PER_SEC));;
 }
