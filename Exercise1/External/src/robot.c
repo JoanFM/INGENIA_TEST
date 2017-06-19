@@ -8,7 +8,7 @@ void RobotTask(uint8_t u8Command){
 
     while(!RobotStopped){
         clock_t now = clock();
-        /*Simulate a task that takes 2 seconds*/
+        /*Simulate a task that takes 2 seconds, just for testing purposes*/
         if((now - inittask)/(CLOCKS_PER_SEC) > 2){
             break;
         }
